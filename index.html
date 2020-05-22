@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validacion de formulario con jquery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="jquery.validate.js"></script>
+    <script src="messages_es_AR.js"></script>
+    <script src="validacuit.js"></script> <!--lo compartió el profe-->
+
+    <style>
+        .error{
+            color: red;
+        }
+        body{
+            margin: 10px;
+            font-family: 'Kanit', sans-serif;
+        }
+        button{
+            margin-top: 10px;
+        }
+    </style>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#miForm').validate();
+    });
+    </script>
+</head>
+<body>
+
+<h2>Probaremos la validacion de este formulario con jquery</h2>
+<h3>Por favor completar</h3>
+
+
+
+    <form id="miForm"  method="POST" action="https://www.hashemian.com/tools/form-post-tester.php?code=250991&b=View">
+
+
+
+        
+        Nombre: <input type="text" name="campoNombre" id="campoNombre" required><br>
+        Cuit: <input type="text" id="campoCUIT"  name="campoCUIT" class="cuit" required placeholder="xx-xxxxxxxx-x"><br>
+        Email: <input type="email" name="campoEmail" required><br>
+        Numero: <input type="text" name="campoNumero" required><br>
+        <button type="submit">Enviar datos</button>
+        </form>
+
+      
+<script>
+    function validaCuit(cuit) {
+  if (typeof (cuit) == 'undefined')
+    return true;
+ 
+ cuit = cuit.toString().replace(/[-_]/g, "");
+ 
+ if (cuit == '')
+     return true; //No estamos validando si el campo esta vacio, eso queda para el "required"
+ 
+ if (cuit.length != 11)
+     return false;
+ else {
+      var mult = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+      var total = 0;
+      for (var i = 0; i < mult.length; i++) {
+          total += parseInt(cuit[i]) * mult[i];
+      }
+      var mod = total % 11;
+      var digito = mod == 0 ? 0 : mod == 1 ? 9 : 11 - mod;
+  }
+ 
+  return digito == parseInt(cuit[10]);
+}
+     
+$.validator.addMethod("cuit", validaCuit, 'CUIT/CUIT Inválido');
+</script>
+
+</body>
+</html>
